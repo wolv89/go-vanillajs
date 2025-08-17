@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"frontendmasters.com/reelingit/handlers"
 	"frontendmasters.com/reelingit/logger"
 )
 
@@ -23,6 +24,9 @@ func main() {
 	// Server Logger
 	slog := initialiseLogger()
 	defer slog.Close()
+
+	mh := handlers.MovieHandler{}
+	http.HandleFunc("/api/movies/top", mh.GetTopMovies)
 
 	http.Handle("/", http.FileServer(http.Dir("public")))
 
