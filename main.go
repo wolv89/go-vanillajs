@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 
+	"frontendmasters.com/reelingit/data"
 	"frontendmasters.com/reelingit/handlers"
 	"frontendmasters.com/reelingit/logger"
 	"github.com/joho/godotenv"
@@ -48,7 +49,12 @@ func main() {
 	}
 	defer db.Close()
 
-	mh := handlers.MovieHandler{}
+	movieRepo, _ := data.NewMovieRepository(db, slog)
+
+	mh := handlers.MovieHandler{
+		Storage: movieRepo,
+		Logger:  slog,
+	}
 	http.HandleFunc("/api/movies/top", mh.GetTopMovies)
 	http.HandleFunc("/api/movies/random", mh.GetRandomMovies)
 
